@@ -3,6 +3,7 @@ import 'dart:math';
 import './models/transaction.dart';
 import './components/transaction_list.dart';
 import './components/transaction_form.dart';
+import './components/chart.dart';
 
 void main() => runApp(ExpensesApp());
 
@@ -59,14 +60,25 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   final List<Transaction> _transactions = [
-    /*  Transaction(
+    Transaction(
         id: 't1',
         title: 'Novo Tenis de corrida',
         value: 310.76,
-        date: DateTime.now()),
+        date: DateTime.now().subtract(
+          const Duration(days: 3),
+        )),
     Transaction(
-        id: 't2', title: 'Conta de Luz', value: 211.30, date: DateTime.now()), */
+        id: 't2', title: 'Conta de Luz', value: 211.30, date: DateTime.now()),
   ];
+
+  List<Transaction> get _recentTransactions {
+    return _transactions.where((tr) {
+      return tr.date.isAfter(DateTime.now().subtract(
+        const Duration(days: 7),
+      ));
+    }).toList();
+  }
+
   _addTransaction(String title, double value) {
     final newTransaction = Transaction(
       id: Random().nextDouble().toString(),
@@ -108,12 +120,7 @@ class _MyHomePageState extends State<MyHomePage> {
           //mainAxisAlignment: MainAxisAlignment.spaceAround,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
-            Container(
-              child: const Card(
-                child: Text("Gráfico"),
-                elevation: 5,
-              ),
-            ),
+            Chart(_recentTransactions),
             TransactionList(_transactions),
           ],
         ),
