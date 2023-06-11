@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'adaptative_button.dart';
 
 class TransactionForm extends StatefulWidget {
   final void Function(
@@ -48,61 +49,65 @@ class _TransactionFormState extends State<TransactionForm> {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      elevation: 5,
-      child: Padding(
-        padding: const EdgeInsets.all(10.0),
-        child: Column(
-          children: [
-            TextField(
-              controller: _titleController,
-              onSubmitted: (_) => _submitForm(),
-              decoration: InputDecoration(
-                labelText: 'Título',
-              ),
-            ),
-            TextField(
-              keyboardType: TextInputType.numberWithOptions(decimal: true),
-              onSubmitted: (_) => _submitForm(),
-              controller: _valueController,
-              decoration: InputDecoration(
-                labelText: 'Valor (R\$)',
-              ),
-            ),
-            Row(
-              children: [
-                _selectedDate == null
-                    ? Text('Nenhuma data selecionada!')
-                    : Text(
-                        'Data Selecionada: ${DateFormat('dd/MM/y').format(_selectedDate)}'),
-                TextButton(
-                  onPressed: _showDatePicker,
-                  child: Text(
-                    'Selecionar Data',
-                    style: TextStyle(
-                      color: Theme.of(context).primaryColor,
-                      fontWeight: FontWeight.bold,
+    return LayoutBuilder(builder: (context, constraints) {
+      return SingleChildScrollView(
+        child: Container(
+          height: 250,
+          child: Card(
+            elevation: 5,
+            child: Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: Column(
+                children: [
+                  TextField(
+                    controller: _titleController,
+                    onSubmitted: (_) => _submitForm(),
+                    decoration: InputDecoration(
+                      labelText: 'Título',
                     ),
                   ),
-                ),
-              ],
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                ElevatedButton(
-                  child: Text('Nova Transação'),
-                  style: TextButton.styleFrom(
-                    foregroundColor:
-                        Theme.of(context).textTheme.labelLarge!.color,
+                  TextField(
+                    keyboardType:
+                        TextInputType.numberWithOptions(decimal: true),
+                    onSubmitted: (_) => _submitForm(),
+                    controller: _valueController,
+                    decoration: InputDecoration(
+                      labelText: 'Valor (R\$)',
+                    ),
                   ),
-                  onPressed: _submitForm,
-                )
-              ],
-            )
-          ],
+                  Row(
+                    children: [
+                      _selectedDate == null
+                          ? Text('Nenhuma data selecionada!')
+                          : Text(
+                              'Data Selecionada: ${DateFormat('dd/MM/y').format(_selectedDate)}'),
+                      TextButton(
+                        onPressed: _showDatePicker,
+                        child: Text(
+                          'Selecionar Data',
+                          style: TextStyle(
+                            color: Theme.of(context).primaryColor,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      AdaptativeButton(
+                        label: 'Nova Transação',
+                        onPressed: _submitForm,
+                      ),
+                    ],
+                  )
+                ],
+              ),
+            ),
+          ),
         ),
-      ),
-    );
+      );
+    });
   }
 }
